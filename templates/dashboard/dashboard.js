@@ -132,58 +132,120 @@ function resetSearch() {
 function showNotification(message, type = 'success') {
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
-    notification.textContent = message;
+    notification.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    notification.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
+
+    const inner = document.createElement('div');
+    inner.className = 'notification-inner';
+
+    const icon = document.createElement('span');
+    icon.className = 'notification-icon';
+    icon.textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
+
+    const text = document.createElement('div');
+    text.className = 'notification-text';
+    text.innerHTML = message;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'notification-close';
+    closeBtn.setAttribute('aria-label', 'Close notification');
+    closeBtn.innerHTML = '&times;';
+
+    inner.appendChild(icon);
+    inner.appendChild(text);
+    inner.appendChild(closeBtn);
+    notification.appendChild(inner);
     document.body.appendChild(notification);
-    
-    setTimeout(() => notification.classList.add('show'), 100);
-    setTimeout(() => {
+
+    // Show with small delay for transition
+    requestAnimationFrame(() => setTimeout(() => notification.classList.add('show'), 50));
+
+    // Auto-dismiss
+    const dismissAfter = 3500;
+    const timeoutId = setTimeout(() => close(), dismissAfter);
+
+    function close() {
+        clearTimeout(timeoutId);
         notification.classList.remove('show');
-        setTimeout(() => document.body.removeChild(notification), 300);
-    }, 3000);
+        setTimeout(() => {
+            if (notification.parentNode) notification.parentNode.removeChild(notification);
+        }, 260);
+    }
+
+    // Dismiss on click of close button or on notification click
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        close();
+    });
+    notification.addEventListener('click', () => close());
 }
-// Login form handler
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+// Initialize fetch handler: supports either a form submit (`#loginForm`) or
+// a standalone button (`#fetchBtn`). Posts credentials to `/fetch_attendance`.
+function initFetchHandler() {
+    const loginForm = document.getElementById('loginForm');
     const fetchBtn = document.getElementById('fetchBtn');
     const btnText = document.getElementById('btnText');
     const spinner = document.getElementById('loadingSpinner');
-    
-    // Show loading state
-    fetchBtn.disabled = true;
-    btnText.style.display = 'none';
-    spinner.style.display = 'inline-block';
-    
-    try {
-        const response = await fetch('/fetch_attendance', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ username, password })
-        });
-        
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            attendanceData = data;
-            displayDashboard(data);
-            showNotification('Attendance data fetched successfully!');
-            document.getElementById('refreshBtn').classList.add('show');
-        } else {
-            showError(data.message || 'Failed to fetch attendance data');
+
+    async function doFetch(username, password) {
+        if (!fetchBtn) return;
+
+        // Basic validation
+        if (!username || !password) {
+            showError('Username and password are required');
+            return;
         }
-    } catch (error) {
-        showError('Network error: ' + error.message);
-    } finally {
-        // Reset loading state
-        fetchBtn.disabled = false;
-        btnText.style.display = 'inline';
-        spinner.style.display = 'none';
+
+        // Show loading state
+        fetchBtn.disabled = true;
+        if (btnText) btnText.style.display = 'none';
+        if (spinner) spinner.style.display = 'inline-block';
+
+        try {
+            const response = await fetch('/fetch_attendance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const data = await response.json();
+            if (data.status === 'success') {
+                attendanceData = data;
+                displayDashboard(data);
+                showNotification('Attendance data fetched successfully!');
+                const refreshBtn = document.getElementById('refreshBtn');
+                if (refreshBtn) refreshBtn.classList.add('show');
+            } else {
+                showError(data.message || 'Failed to fetch attendance data');
+            }
+        } catch (err) {
+            showError('Network error: ' + (err.message || err));
+        } finally {
+            // Reset loading state
+            fetchBtn.disabled = false;
+            if (btnText) btnText.style.display = 'inline';
+            if (spinner) spinner.style.display = 'none';
+        }
     }
-});
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username')?.value || '';
+            const password = document.getElementById('password')?.value || '';
+            doFetch(username, password);
+        });
+    } else if (fetchBtn) {
+        fetchBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const username = document.getElementById('username')?.value || '';
+            const password = document.getElementById('password')?.value || '';
+            doFetch(username, password);
+        });
+    }
+}
+
+initFetchHandler();
 
 function showError(message) {
     const errorDiv = document.getElementById('errorMessage');
