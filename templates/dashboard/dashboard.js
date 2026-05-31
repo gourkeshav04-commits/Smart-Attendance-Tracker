@@ -1335,17 +1335,90 @@ function saveCorrections() {
 // Populate subject dropdown
 function populateCorrectionsDropdown() {
     if (!attendanceData || !attendanceData.subjects) return;
-    
     const select = document.getElementById('correctionSubject');
     select.innerHTML = '<option value="">Choose a subject...</option>';
-    
+
     attendanceData.subjects.forEach((subject, index) => {
         const option = document.createElement('option');
         option.value = index;
         option.textContent = `${subject.subject} (${subject.attended}/${subject.total})`;
         select.appendChild(option);
     });
+
+    // Build or refresh custom dropdown UI
+    buildCustomSubjectDropdown();
 }
+
+function buildCustomSubjectDropdown() {
+    const select = document.getElementById('correctionSubject');
+    const wrapper = document.getElementById('customCorrectionSelect');
+    const panel = document.getElementById('customCorrectionList');
+    const label = wrapper.querySelector('.custom-select__label');
+    panel.innerHTML = '';
+
+    // Add option rows
+    Array.from(select.options).forEach((opt, idx) => {
+        if (opt.value === '') return; // skip placeholder
+        const subj = attendanceData.subjects[opt.value];
+        const row = document.createElement('div');
+        row.className = 'custom-option';
+        row.setAttribute('role', 'option');
+        row.setAttribute('data-value', opt.value);
+        row.tabIndex = 0;
+
+        const left = document.createElement('div');
+        left.innerHTML = `<div class="option-title">${escapeHtml(subj.subject)}</div><div class="option-meta">${subj.attended} / ${subj.total}</div>`;
+
+        const badge = document.createElement('div');
+        badge.className = 'subject-badge';
+        badge.textContent = `${subj.attended} / ${subj.total}`;
+
+        row.appendChild(left);
+        row.appendChild(badge);
+        panel.appendChild(row);
+
+        // click handler
+        row.addEventListener('click', () => {
+            select.value = opt.value;
+            label.textContent = `${subj.subject}   [${subj.attended} / ${subj.total}]`;
+            // update aria-selected
+            panel.querySelectorAll('.custom-option').forEach(r => r.removeAttribute('aria-selected'));
+            row.setAttribute('aria-selected', 'true');
+            wrapper.setAttribute('aria-expanded', 'false');
+        });
+
+        // keyboard selection
+        row.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); row.click(); }
+            if (e.key === 'ArrowDown') { e.preventDefault(); focusNextOption(row); }
+            if (e.key === 'ArrowUp') { e.preventDefault(); focusPrevOption(row); }
+        });
+    });
+
+    // Toggle behavior
+    const toggle = document.getElementById('customCorrectionToggle');
+    wrapper.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(); focusFirstOption(); }
+        if (e.key === 'Escape') { closePanel(); }
+    });
+    toggle.addEventListener('click', (e) => { e.preventDefault(); const open = wrapper.getAttribute('aria-expanded') === 'true'; if (open) closePanel(); else openPanel(); });
+
+    function openPanel() { wrapper.setAttribute('aria-expanded', 'true'); wrapper.classList.add('open'); panel.focus(); }
+    function closePanel(){ wrapper.setAttribute('aria-expanded', 'false'); wrapper.classList.remove('open'); }
+    function focusFirstOption(){ const r = panel.querySelector('.custom-option'); if (r) r.focus(); }
+    function focusNextOption(current){ const items = Array.from(panel.querySelectorAll('.custom-option')); const i = items.indexOf(current); if (i < items.length -1) items[i+1].focus(); }
+    function focusPrevOption(current){ const items = Array.from(panel.querySelectorAll('.custom-option')); const i = items.indexOf(current); if (i > 0) items[i-1].focus(); }
+}
+
+// Close custom select panels when clicking outside
+document.addEventListener('click', (e) => {
+    const openSelect = document.querySelector('.custom-select[aria-expanded="true"]');
+    if (!openSelect) return;
+    if (openSelect.contains(e.target)) return;
+    openSelect.setAttribute('aria-expanded', 'false');
+});
+
+function escapeHtml(unsafe) { return unsafe.replace(/[&<"'`=\/]/g, function (s) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;','/':'\/','=':'&#61;','`':'&#96;'}[s]; }); }
 
 // Apply correction
 function applyCorrection() {

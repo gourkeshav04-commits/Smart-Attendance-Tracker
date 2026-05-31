@@ -333,9 +333,20 @@
                 <div class="correction-controls">
                     <div class="form-group" style="flex: 1; min-width: 200px;">
                         <label for="correctionSubject">Select Subject</label>
-                        <select id="correctionSubject" class="correction-select">
+                        <!-- Native select kept for form value/scripting but visually hidden; custom dropdown below -->
+                        <select id="correctionSubject" class="correction-select" aria-hidden="true" style="display:none">
                             <option value="">Choose a subject...</option>
                         </select>
+
+                        <div class="custom-select" id="customCorrectionSelect" tabindex="0" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-controls="customCorrectionList">
+                            <button type="button" class="custom-select__toggle" id="customCorrectionToggle" aria-label="Select subject">
+                                <span class="custom-select__label">Choose a subject...</span>
+                                <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            </button>
+                            <div class="custom-select__panel" id="customCorrectionList" role="listbox" tabindex="-1">
+                                <!-- Options inserted dynamically -->
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group" style="flex: 0 0 150px;">
                         <label for="correctionsCount">Classes to Mark Present</label>
