@@ -53,14 +53,14 @@
         <div class="field">
           <label for="username">Student ID / Username</label>
           <div class="input-wrap">
-            <span class="input-icon">👤</span>
+            <span class="input-icon" data-icon="user" aria-hidden="true"></span>
             <input id="username" type="text" placeholder="e.g. 0103AL231103" autocomplete="username">
           </div>
         </div>
         <div class="field">
           <label for="password">Portal Password</label>
           <div class="input-wrap">
-            <span class="input-icon">🔒</span>
+            <span class="input-icon" data-icon="lock" aria-hidden="true"></span>
             <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
           </div>
 
@@ -262,7 +262,7 @@
                     </div>
                 </div>
                 <button type="submit" class="btn" id="fetchBtn">
-                    <span id="btnText">🔍 Fetch Attendance</span>
+                    <span id="btnText"><span data-icon="search" aria-hidden="true"></span> Fetch Attendance</span>
                     <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
                 </button>
             </form>
@@ -387,7 +387,7 @@
             </div>
 
             <div class="actions-section">
-                <h3>${' '}<span data-icon="chart-bar" aria-hidden="true"></span> Export & Actions</h3>
+                <h3><span data-icon="chart-bar" aria-hidden="true"></span> Export & Actions</h3>
                 <div class="actions-grid">
                         <div class="toolbar">
                             <div class="toolbar-group">

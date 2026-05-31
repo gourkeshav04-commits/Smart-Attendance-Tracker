@@ -412,7 +412,7 @@ html {
     gap: 6px;
   }
 
-  .info-text::before { content: '🔒'; font-size: 11px; }
+    .info-text::before { content: ''; font-size: 11px; }
 
   .btn-primary {
         display: inline-flex;

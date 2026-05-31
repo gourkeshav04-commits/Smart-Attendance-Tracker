@@ -720,7 +720,7 @@ function toggleView(view) {
         listView.classList.add('active');
         listView.classList.remove('hidden');
         listView.style.display = 'block';
-        console.log('📋 Switched to List View');
+        console.log('Switched to List View');
     }
     
     // Save preference

@@ -109,7 +109,7 @@ Smart-Attendance-Tracker/
 └── venv/                 # Virtual environment (not tracked)
 ```
 
-## 🎯 How It Works
+## How It Works
 
 1. **Authentication**: Securely connects to LNCT portal using your credentials
 2. **Data Scraping**: Selenium automates browser interaction to fetch attendance data
@@ -118,7 +118,7 @@ Smart-Attendance-Tracker/
 5. **Visualization**: Frontend displays data with interactive charts
 6. **Recommendations**: Smart algorithm provides personalized suggestions
 
-## 📊 Screenshots
+## Screenshots
 
 ### Landing Page
 Professional landing page with modern animations and smooth transitions.
@@ -129,14 +129,14 @@ Interactive dashboard with real-time attendance analytics and predictions.
 ### Charts
 Beautiful visualizations showing attendance patterns across all subjects.
 
-## 🔒 Security & Privacy
+## Security & Privacy
 
 - Credentials are only used for temporary session authentication
 - No data is stored on our servers
 - All connections are made directly to LNCT portal
 - Session data is cleared after use
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -146,25 +146,25 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 This tool is developed for educational purposes to help LNCT students track their attendance. It is not officially affiliated with LNCT College. Use responsibly and ensure compliance with your institution's policies.
 
-## 👨‍💻 Developer
+## Developer
 
-Developed with ❤️ for LNCT Students
+Developed with care for LNCT Students
 
-## 🐛 Known Issues
+## Known Issues
 
 - Requires Chrome browser to be installed
 - May need ChromeDriver updates for newer Chrome versions
 - Portal structure changes may require code updates
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 - [ ] Email notifications for low attendance
 - [ ] Mobile app (React Native)
@@ -174,11 +174,11 @@ Developed with ❤️ for LNCT Students
 - [ ] Offline mode
 - [ ] Browser extension
 
-## 📧 Contact
+## Contact
 
 For questions, suggestions, or issues, please open an issue on GitHub.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - LNCT College for providing the portal system
 - All contributors who helped improve this project
@@ -186,6 +186,6 @@ For questions, suggestions, or issues, please open an issue on GitHub.
 
 ---
 
-**Made with ❤️ for LNCT Students**
+**Made with care for LNCT Students**
 
 ⭐ Star this repo if you find it helpful!
