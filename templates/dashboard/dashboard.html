@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,17 +11,243 @@
 <body>
     <div class="particle-container" id="particleContainer"></div>
     <div class="container">
-        <div class="header">
-            <h1>Smart Attendance Analyzer</h1>
-            <p>Smart attendance tracking with predictive insights</p>
+
+        
+<div class="wrapper">
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <!-- <div class="logo-icon"></div> -->
+        <div class="logo-text">Smart <span>Attendance</span>Tracker</div>
+      </div>
+        <!-- nav links header -->
+      <div class="nav-links">
+        <a class="nav-link active" onclick="showPage('dashboard')">Dashboard</a>
+        <a class="nav-link" onclick="showPage('help')">Help</a>
+        <div class="nav-divider"></div>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span id="theme-icon"></span>
+            <span id="theme-text"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- <div class="hero" id="hero">
+    <div class="hero-label">Predictive Analytics</div>
+    <h1>Smart <span class="highlight">Attendance</span><br>Tracker</h1>
+    <p>Track your attendance in real-time. Get AI-powered predictions on bunkable classes and shortage alerts.</p>
+  </div>
+
+  <div class="main-card">
+    <div class="card-header">
+      <div class="card-title">
+        <div class="dot"></div>
+        Fetch Attendance Data
+      </div>
+      <div class="card-subtitle">Connects to college portal</div>~
+    </div>
+
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="field">
+          <label for="username">Student ID / Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input id="username" type="text" placeholder="e.g. 0103AL231103" autocomplete="username">
+          </div>
+        </div>
+        <div class="field">
+          <label for="password">Portal Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
+          </div>
+
+        </div>
+      </div> -->
+      <!-- NEW CHANGES  -->
+       <!-- DASHBOARD HERO (default) -->
+    <div id="dashboard-hero">
+        <div class="hero" id="hero">
+            <div class="hero-label">Predictive Analytics</div>
+            <h1>Smart <span class="highlight">Attendance</span><br>Tracker</h1>
+            <p>Track your attendance in real-time. Get AI-powered predictions on bunkable classes and shortage alerts.</p>
+        </div>
+    </div>
+
+    <div class="main-card">
+        <div class="card-header">
+            <div class="card-title">
+                <div class="dot"></div>
+                Fetch Attendance Data
+            </div>
+            <div class="card-subtitle">Connects to college portal</div>
         </div>
 
-        <div class="controls">
-            <div class="theme-toggle" onclick="toggleTheme()">
-                <span id="theme-icon">🌙</span>
-                <span id="theme-text">Dark Mode</span>
+        <div class="card-body">
+            <div class="form-grid">
+                <div class="field">
+                    <label for="username">Student ID / Username</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">👤</span>
+                        <input id="username" type="text" placeholder="e.g. 0103AL231103" autocomplete="username">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="password">Portal Password</label>
+                    <div class="input-wrap">
+                        <span class="input-icon">🔒</span>
+                        <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <div class="info-text">Credentials are never stored or shared</div>
+                <button type="submit" class="btn-primary" id="fetchBtn">
+                    <span id="btnText">🔍 Fetch Attendance</span>
+                    <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
+                </button>
             </div>
         </div>
+
+    </div>
+<!-- help hero -->
+    <div id="help-hero" style="display:none">
+    <section class="hero">
+        <div class="hero-label">Help Center</div>
+        <h1>How can we <span class="highlight">help you?</span></h1>
+        <p>Everything you need to know about Smart Attendance Tracker.</p>
+        <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" class="search-input" placeholder="Search for answers..."/>
+        <span class="search-clear" id="search-clear" onclick="clearSearch()">✕</span>
+        </div>
+    </section>
+    <!-- QUICK LINKS -->
+    <section class="quick-links" id="quick-links">
+        <div class="quick-card" onclick="jumpTo('getting-started')"><div class="quick-icon">🚀</div><div class="quick-label">Getting Started</div></div>
+        <div class="quick-card" onclick="jumpTo('attendance')"><div class="quick-icon">📋</div><div class="quick-label">Attendance</div></div>
+        <div class="quick-card" onclick="jumpTo('predictions')"><div class="quick-icon">🤖</div><div class="quick-label">AI Predictions</div></div>
+        <div class="quick-card" onclick="jumpTo('account')"><div class="quick-icon">👤</div><div class="quick-label">Account</div></div>
+        <div class="quick-card" onclick="jumpTo('privacy')"><div class="quick-icon">🔒</div><div class="quick-label">Privacy</div></div>
+        <div class="quick-card" onclick="jumpTo('troubleshooting')"><div class="quick-icon">🛠️</div><div class="quick-label">Troubleshooting</div></div>
+    </section>
+    <!-- FAQ CONTAINER -->
+    <div class="faq-container" id="faq-container">
+        <section class="faq-section" id="getting-started">
+        <div class="section-label-line"><span class="section-dot"></span>Getting Started</div>
+        <div class="faq-item" data-tags="getting started login portal">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>How do I access my attendance data?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Enter your <strong>Student ID / Username</strong> and <strong>Portal Password</strong> on the main dashboard. Click <strong>Access Portal</strong> and the tracker will fetch your latest attendance data automatically.</p></div>
+        </div>
+        <div class="faq-item" data-tags="install setup first time">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>Do I need to install anything?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>No installation required. Smart Attendance Tracker is fully web-based. Just open the page in any modern browser — Chrome, Firefox, Edge, or Safari.</p></div>
+        </div>
+        <div class="faq-item" data-tags="browser support chrome firefox safari">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>Which browsers are supported?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>We support all modern browsers: <strong>Chrome 90+</strong>, <strong>Firefox 88+</strong>, <strong>Edge 90+</strong>, and <strong>Safari 14+</strong>.</p></div>
+        </div>
+    </section>
+        <section class="faq-section" id="attendance">
+        <div class="section-label-line"><span class="section-dot"></span>Attendance</div>
+        <div class="faq-item" data-tags="attendance update refresh sync">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>How often is my attendance updated?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Attendance data is fetched live from your college portal each time you log in. If a class was just marked, wait a few minutes and refresh.</p></div>
+        </div>
+        <div class="faq-item" data-tags="attendance bunk skip classes safe">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>How many classes can I bunk safely?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>The dashboard shows a <strong>Bunkable Classes</strong> count per subject, calculated so your attendance stays above 75%.</p></div>
+        </div>
+        <div class="faq-item" data-tags="attendance below 75 shortage danger">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>What happens if attendance drops below 75%?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>The subject card turns red with a <strong>Danger</strong> badge and shows exactly how many consecutive classes you must attend to get back above 75%.</p></div>
+        </div>
+    </section>
+        <section class="faq-section" id="predictions">
+        <div class="section-label-line"><span class="section-dot"></span>AI Predictions</div>
+        <div class="faq-item" data-tags="ai prediction how works algorithm">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>How does the AI prediction work?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>The predictor models different scenarios — attending all remaining classes, attending 80%, or skipping some — and shows projected final percentages for each case.</p></div>
+        </div>
+        <div class="faq-item" data-tags="prediction accurate reliable">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>How accurate are the predictions?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Predictions are mathematically accurate based on the data you provide. Always update remaining class count when your timetable changes.</p></div>
+        </div>
+    </section>
+        <section class="faq-section" id="account">
+        <div class="section-label-line"><span class="section-dot"></span>Account</div>
+        <div class="faq-item" data-tags="password stored saved credentials">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>Is my password saved anywhere?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>No. Your credentials are <strong>never stored</strong> on any server. They are used only to fetch data during the session and discarded immediately after.</p></div>
+        </div>
+        <div class="faq-item" data-tags="logout session end">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>How do I log out?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Click the <strong>Logout</strong> button on the dashboard. Closing the browser tab also ends your session since no data is persisted.</p></div>
+        </div>
+    </section>
+        <section class="faq-section" id="privacy">
+        <div class="section-label-line"><span class="section-dot"></span>Privacy &amp; Security</div>
+        <div class="faq-item" data-tags="privacy data collected tracking">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>What data does the tracker collect?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>The tracker does not collect or transmit any personal data to external servers. All processing happens locally in your browser.</p></div>
+        </div>
+        <div class="faq-item" data-tags="localstorage stored browser">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>What is stored in my browser?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Only your <strong>theme preference</strong> and any <strong>manual corrections</strong> you have applied are saved in localStorage.</p></div>
+        </div>
+    </section>
+        <section class="faq-section" id="troubleshooting">
+        <div class="section-label-line"><span class="section-dot"></span>Troubleshooting</div>
+        <div class="faq-item" data-tags="not loading error fetch failed network">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>Data is not loading — what should I do?</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a">
+            <p>Try these steps in order:</p>
+            <ol>
+                <li>Check your internet connection.</li>
+                <li>Verify your credentials on the college portal directly.</li>
+                <li>Clear your browser cache and reload.</li>
+                <li>Try a different browser.</li>
+            </ol>
+            </div>
+        </div>
+        <div class="faq-item" data-tags="wrong data mismatch portal">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>Data shown doesn't match my college portal.</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Log out and log back in to force a fresh fetch. Use the <strong>Corrections</strong> feature to manually adjust figures until the portal updates.</p></div>
+        </div>
+        <div class="faq-item" data-tags="theme dark light not working toggle">
+            <button class="faq-q" onclick="toggleFaq(this)"><span>The theme toggle isn't working.</span><span class="faq-arrow">›</span></button>
+            <div class="faq-a"><p>Hard-refresh with <strong>Ctrl + Shift + R</strong> (Windows) or <strong>Cmd + Shift + R</strong> (Mac). If that doesn't help, clear localStorage in Developer Tools.</p></div>
+        </div>
+    </section>
+    </div><!-- /faq-container -->
+    <div class="no-results" id="no-results">
+        <div class="no-results-icon">🔍</div>
+        <p>No results for "<span id="no-results-query"></span>"</p>
+        <small>Try different keywords or browse the sections above.</small>
+    </div>
+    <section class="contact-section">
+        <div class="contact-inner">
+        <div class="contact-text">
+            <div class="section-label-line" style="margin-bottom:12px"><span class="section-dot"></span>Still need help?</div>
+            <p>Can't find what you're looking for? Reach out and we'll get back to you.</p>
+        </div>
+        <a href="mailto:support@smartattendance.app" class="btn-contact">✉️ Contact Support</a>
+        </div>
+    </section>
+    </div>
+<!-- new changes ended  -->
+
+  <footer>
+    <div class="footer-text">© 2026 Smart Attendence Tracker · Smart attendance tracking with predictive insights</div>
+    <div class="footer-text">Built for students · v2.0</div>
+  </footer>
+</div>
+        <!--
+
+        
 
         <div class="login-section">
             <form id="loginForm">
@@ -40,7 +266,8 @@
                     <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
                 </button>
             </form>
-        </div>
+        </div> -->
+        <!-- yaha tak  -->
 
         <div id="errorMessage"></div>
 

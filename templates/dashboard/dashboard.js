@@ -2,32 +2,130 @@ let attendanceData = null;
 let charts = {};
 
 // Theme management
-function toggleTheme() {
-    const body = document.body;
-    const themeIcon = document.getElementById('theme-icon');
-    const themeText = document.getElementById('theme-text');
-    
-    if (body.getAttribute('data-theme') === 'dark') {
-        body.removeAttribute('data-theme');
-        themeIcon.textContent = '🌙';
-        themeText.textContent = 'Dark Mode';
-        localStorage.setItem('theme', 'light');
+function setTheme(theme) {
+    if (theme === 'light') {
+        document.body.classList.add('light');
     } else {
-        body.setAttribute('data-theme', 'dark');
-        themeIcon.textContent = '☀️';
-        themeText.textContent = 'Light Mode';
-        localStorage.setItem('theme', 'dark');
+        document.body.classList.remove('light');
     }
+    localStorage.setItem('theme', theme);
+    document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+    document.getElementById('theme-text').textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
 }
 
-// Initialize theme
-function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-        document.body.setAttribute('data-theme', 'dark');
-        document.getElementById('theme-icon').textContent = '☀️';
-        document.getElementById('theme-text').textContent = 'Light Mode';
+function toggleTheme() {
+    const isLight = document.body.classList.contains('light');
+    setTheme(isLight ? 'dark' : 'light');
+}
+
+setTheme(localStorage.getItem('theme') || 'dark');
+
+// NEW CHANGES FOR HELP 
+// ── Page switcher ──
+function showPage(page) {
+  const dashboardHero = document.getElementById('dashboard-hero');
+  const helpHero      = document.getElementById('help-hero');
+  const dashboard     = document.getElementById('dashboard');
+  const navLinks      = document.querySelectorAll('.nav-link');
+
+  // Update active nav link
+  navLinks.forEach(link => link.classList.remove('active'));
+  event.target.classList.add('active');
+
+    if (page === 'dashboard') {
+        dashboardHero.style.display = 'block';
+        helpHero.style.display      = 'none';
     }
+   else if (page === 'help') {
+    dashboardHero.style.display = 'none';
+    helpHero.style.display      = 'block';
+    dashboard.classList.remove('active');
+  }
+}
+
+// ── FAQ toggle ──
+function toggleFaq(btn) {
+  const item   = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ── Jump to section ──
+function jumpTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const first = el.querySelector('.faq-item');
+  if (first && !first.classList.contains('open')) first.classList.add('open');
+}
+
+// ── Help Search ──
+function initHelpSearch() {
+  const searchInput  = document.getElementById('search-input');
+  const searchClear  = document.getElementById('search-clear');
+  const noResults    = document.getElementById('no-results');
+  const noResultsQ   = document.getElementById('no-results-query');
+  const faqContainer = document.getElementById('faq-container');
+  const quickLinks   = document.getElementById('quick-links');
+
+  if (!searchInput) return;
+
+  searchInput.addEventListener('input', function () {
+    const query = this.value.trim().toLowerCase();
+    searchClear.classList.toggle('visible', query.length > 0);
+
+    if (query === '') { resetSearch(); return; }
+
+    let anyVisible = false;
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const q    = item.querySelector('.faq-q span')?.textContent.toLowerCase() || '';
+      const a    = item.querySelector('.faq-a')?.textContent.toLowerCase() || '';
+      const tags = (item.dataset.tags || '').toLowerCase();
+      const match = q.includes(query) || a.includes(query) || tags.includes(query);
+      item.classList.toggle('hidden', !match);
+      if (match) anyVisible = true;
+    });
+
+    document.querySelectorAll('.faq-section').forEach(section => {
+      const hasVisible = [...section.querySelectorAll('.faq-item')].some(i => !i.classList.contains('hidden'));
+      section.style.display = hasVisible ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('.faq-item:not(.hidden)').forEach(item => item.classList.add('open'));
+
+    if (!anyVisible) {
+      noResultsQ.textContent = query;
+      noResults.classList.add('visible');
+      faqContainer.style.display = 'none';
+      quickLinks.style.display   = 'none';
+    } else {
+      noResults.classList.remove('visible');
+      faqContainer.style.display = 'flex';
+      quickLinks.style.display   = 'grid';
+    }
+  });
+}
+
+function clearSearch() {
+  const searchInput = document.getElementById('search-input');
+  if (!searchInput) return;
+  searchInput.value = '';
+  searchInput.dispatchEvent(new Event('input'));
+  searchInput.focus();
+}
+
+function resetSearch() {
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('hidden', 'open'));
+  document.querySelectorAll('.faq-section').forEach(s => s.style.display = 'block');
+  const noResults    = document.getElementById('no-results');
+  const faqContainer = document.getElementById('faq-container');
+  const quickLinks   = document.getElementById('quick-links');
+  const searchClear  = document.getElementById('search-clear');
+  if (noResults)    noResults.classList.remove('visible');
+  if (faqContainer) faqContainer.style.display = 'flex';
+  if (quickLinks)   quickLinks.style.display   = 'grid';
+  if (searchClear)  searchClear.classList.remove('visible');
 }
 
 // Show notification
@@ -43,7 +141,6 @@ function showNotification(message, type = 'success') {
         setTimeout(() => document.body.removeChild(notification), 300);
     }, 3000);
 }
-
 // Login form handler
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -904,12 +1001,13 @@ function disableAutoRefresh() {
 }
 
 // Initialize theme on load
+// NEW CHANGES
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     
     // Initialize chart system
     initializeCharts();
-    
+    initHelpSearch();
     // Check if there's saved data in sessionStorage
     const savedData = sessionStorage.getItem('attendanceData');
     if (savedData) {

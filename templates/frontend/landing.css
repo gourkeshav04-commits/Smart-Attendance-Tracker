@@ -643,7 +643,7 @@ h1 {
 }
 
 /* ===== STATS SECTION ===== */
-.stats-section {
+/* .stats-section {
     padding: clamp(3rem, 8vw, 4rem) 5%;
     position: relative;
 }
@@ -718,7 +718,7 @@ h1 {
     color: var(--gray);
     font-weight: 600;
     font-size: clamp(0.875rem, 2vw, 1rem);
-}
+} */
 
 /* ===== FEATURES SECTION (STACKING CARDS) ===== */
 .features-section {
