@@ -9,7 +9,7 @@
 
 
 
-## 🌟 Features
+## Features
 
 - **Real-Time Analytics**: Instant insights into your attendance patterns across all subjects with beautiful charts and visualizations
 - **Smart Predictions**: AI-powered predictions that tell you exactly how many classes you need to attend to reach 75% or 60% thresholds
@@ -21,7 +21,7 @@
 - **Mobile Responsive**: Works perfectly on desktop, tablet, and mobile devices
 - **Secure**: Your credentials are encrypted and never stored
 
-## 🎨 Landing Page Features
+## Landing Page Features
 
 - **Professional Design**: Modern landing page with smooth animations and transitions
 - **Stacking Cards**: Feature cards with elegant scroll animations
@@ -29,7 +29,7 @@
 - **Stats Showcase**: Real-time statistics with hover effects
 - **Interactive Elements**: Smooth scrolling, parallax effects, and floating shapes
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -75,7 +75,7 @@
 6. **Open your browser**
    Navigate to `http://localhost:5000`
 
-## 📖 Usage
+## Usage
 
 1. **Visit the Landing Page**: Go to `http://localhost:5000` to see the project overview
 2. **Launch the App**: Click "Launch App" or navigate to `http://localhost:5000/app`
@@ -85,7 +85,7 @@
 6. **Get Predictions**: See how many classes you need to attend or can skip
 7. **Export Reports**: Download your attendance data as PDF or CSV
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Flask (Python web framework)
 - **Scraping**: Selenium WebDriver with ChromeDriver
@@ -95,7 +95,7 @@
 - **PDF Export**: jsPDF
 - **Responsive Design**: Custom CSS with modern animations
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Smart-Attendance-Tracker/

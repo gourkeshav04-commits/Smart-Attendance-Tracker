@@ -1,6 +1,47 @@
 let attendanceData = null;
 let charts = {};
 
+// Simple icon helper returning inline SVGs (uses currentColor)
+function getIconSVG(name, size = 16) {
+    const s = size;
+    const common = `width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"`;
+    switch (name) {
+        case 'sun': return `<svg ${common}><path d="M12 3v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 19v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.2 4.2l1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M18.4 18.4l1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/></svg>`;
+        case 'moon': return `<svg ${common}><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+        case 'check-circle': return `<svg ${common}><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`;
+        case 'x-circle': return `<svg ${common}><path d="M15 9l-6 6M9 9l6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`;
+        case 'alert-triangle': return `<svg ${common}><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12 9v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>`;
+        case 'search': return `<svg ${common}><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>`;
+        case 'trash': return `<svg ${common}><path d="M3 6h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 6v14a2 2 0 002 2h4a2 2 0 002-2V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'refresh': return `<svg ${common}><path d="M20 11a8 8 0 10-2.9 6.1L21 21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M21 3v6h-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+        case 'target': return `<svg ${common}><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5" fill="none"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>`;
+        case 'pencil': return `<svg ${common}><path d="M3 21l3-1 11-11 1-3-3 1-11 11-1 3z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+        case 'chart-bar': return `<svg ${common}><path d="M3 3v18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12 17V9M18 21V5M6 21v-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'book': return `<svg ${common}><path d="M4 19.5A2.5 2.5 0 016.5 17H20" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M4 4v15" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 4v15" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'file': return `<svg ${common}><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'clipboard': return `<svg ${common}><path d="M9 2h6v4H9z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="3" y="6" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>`;
+        case 'mail': return `<svg ${common}><path d="M3 8l9 6 9-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>`;
+        case 'rocket': return `<svg ${common}><path d="M9 21l-2-2 5-5 2 2-5 5z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 7l4-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'user': return `<svg ${common}><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>`;
+        case 'lock': return `<svg ${common}><rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'wrench': return `<svg ${common}><path d="M14.7 10.3a6 6 0 10-8.4 8.4L2 21l2.3-4.3a6 6 0 008.4-6.4z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'phone': return `<svg ${common}><rect x="6" y="2" width="12" height="20" rx="2" stroke="currentColor" stroke-width="1.2" fill="none"/><path d="M11 18h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'lightbulb': return `<svg ${common}><path d="M9 18a3 3 0 006 0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12 3a6 6 0 00-4 10.6V15a2 2 0 002 2h4a2 2 0 002-2v-1.4A6 6 0 0012 3z" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        case 'arrow-right': return `<svg ${common}><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`;
+        default: return '';
+    }
+}
+
+// Replace any elements with data-icon attribute to inline SVGs
+function initInlineIcons() {
+    document.querySelectorAll('[data-icon]').forEach(el => {
+        const name = el.getAttribute('data-icon');
+        const size = parseInt(el.getAttribute('data-icon-size')) || 16;
+        const svg = getIconSVG(name, size);
+        if (svg) el.innerHTML = svg;
+    });
+}
+
 // Theme management
 function setTheme(theme) {
     if (theme === 'light') {
@@ -9,7 +50,8 @@ function setTheme(theme) {
         document.body.classList.remove('light');
     }
     localStorage.setItem('theme', theme);
-    document.getElementById('theme-icon').textContent = theme === 'dark' ? '☀️' : '🌙';
+    const themeIcon = document.getElementById('theme-icon');
+    if (themeIcon) themeIcon.innerHTML = theme === 'dark' ? getIconSVG('sun',16) : getIconSVG('moon',16);
     document.getElementById('theme-text').textContent = theme === 'dark' ? 'Light Mode' : 'Dark Mode';
 }
 
@@ -140,7 +182,9 @@ function showNotification(message, type = 'success') {
 
     const icon = document.createElement('span');
     icon.className = 'notification-icon';
-    icon.textContent = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
+    if (type === 'success') icon.innerHTML = getIconSVG('check-circle',18);
+    else if (type === 'error') icon.innerHTML = getIconSVG('x-circle',18);
+    else icon.innerHTML = getIconSVG('alert-triangle',18);
 
     const text = document.createElement('div');
     text.className = 'notification-text';
@@ -285,7 +329,7 @@ initFetchHandler();
 
 function showError(message) {
     const errorDiv = document.getElementById('errorMessage');
-    errorDiv.innerHTML = `<div class="error-message">❌ ${message}</div>`;
+    errorDiv.innerHTML = `<div class="error-message">${message}</div>`;
     setTimeout(() => errorDiv.innerHTML = '', 5000);
     showNotification(message, 'error');
 }
@@ -642,10 +686,10 @@ function createCharts(data) {
             }
         });
         
-        console.log('✅ Charts created successfully with fresh data');
+        console.log('Charts created successfully with fresh data');
         
     } catch (error) {
-        console.error('❌ Error creating charts:', error);
+        console.error('Error creating charts:', error);
         showNotification('Error creating charts: ' + error.message, 'error');
     }
 }
@@ -669,7 +713,7 @@ function toggleView(view) {
         listView.classList.remove('active');
         listView.classList.add('hidden');
         listView.style.display = 'none';
-        console.log('📊 Switched to Grid View');
+        console.log('Switched to Grid View');
     } else if (view === 'list') {
         gridView.classList.add('hidden');
         gridView.style.display = 'none';
@@ -707,7 +751,7 @@ function simulateAttendance() {
     
     // Determine result styling
     const changeClass = change > 0 ? 'success' : change < 0 ? 'danger' : 'warning';
-    const changeIcon = change > 0 ? '📈' : change < 0 ? '📉' : '➡️';
+    const changeIconSVG = change > 0 ? getIconSVG('chart-bar',18) : change < 0 ? getIconSVG('chart-bar',18) : getIconSVG('arrow-right',18);
     const changeText = change > 0 ? 'increase' : change < 0 ? 'decrease' : 'no change';
     
     // Generate recommendation based on new percentage
@@ -715,13 +759,13 @@ function simulateAttendance() {
     let recommendationClass = 'success-message';
     
     if (newPercentage < 60) {
-        recommendation = '⚠️ <strong>Critical:</strong> Below 60% - High risk zone!';
+        recommendation = `${getIconSVG('alert-triangle',16)} <strong>Critical:</strong> Below 60% - High risk zone!`;
         recommendationClass = 'error-message';
     } else if (newPercentage < 75) {
-        recommendation = '⚡ <strong>Warning:</strong> Below 75% - Consider attending more classes';
+        recommendation = `<strong>Warning:</strong> Below 75% - Consider attending more classes`;
         recommendationClass = 'warning-message';
     } else {
-        recommendation = '✅ <strong>Safe:</strong> Above 75% - Good attendance level!';
+        recommendation = `${getIconSVG('check-circle',16)} <strong>Safe:</strong> Above 75% - Good attendance level!`;
         recommendationClass = 'success-message';
     }
     
@@ -731,7 +775,7 @@ function simulateAttendance() {
             <strong>Simulation Result:</strong><br>
             After attending ${classesToAttend} and missing ${classesToMiss} classes:<br>
             <div style="margin-top: 12px; font-size: 1.2rem;">
-                ${changeIcon} <strong>${newPercentage.toFixed(2)}%</strong> 
+                ${changeIconSVG} <strong>${newPercentage.toFixed(2)}%</strong> 
                 <span style="color: var(--${changeClass === 'success' ? 'success' : changeClass === 'danger' ? 'danger' : 'warning'}-color);">
                     (${change > 0 ? '+' : ''}${change.toFixed(2)}% ${changeText})
                 </span>
@@ -752,7 +796,7 @@ function simulateAttendance() {
         
         resultHTML += `
             <div style="margin-top: 15px; padding: 12px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; font-size: 0.9rem;">
-                <strong>💡 Additional Insights:</strong><br>
+                <strong>${getIconSVG('lightbulb',14)} Additional Insights:</strong><br>
                 • If only attending ${classesToAttend}: ${attendOnlyPercentage.toFixed(2)}%<br>
                 • If only missing ${classesToMiss}: ${missOnlyPercentage.toFixed(2)}%<br>
                 • Combined impact: ${newPercentage.toFixed(2)}%
@@ -1074,15 +1118,15 @@ function destroyAllCharts() {
             }
         });
         charts = {};
-        console.log('✅ All charts destroyed successfully');
+        console.log('All charts destroyed successfully');
     } catch (error) {
-        console.error('❌ Error destroying charts:', error);
+        console.error('Error destroying charts:', error);
     }
 }
 
 // Force chart refresh - ensures charts always update with new data
 function forceChartRefresh(data) {
-    console.log('🔄 Force refreshing charts with new data');
+    console.log('Force refreshing charts with new data');
     
     // Always destroy existing charts first
     destroyAllCharts();
@@ -1261,18 +1305,18 @@ window.addEventListener('load', () => {
         
         // Proper console logging
         console.log('📚 Library Status Check:');
-        console.log('Chart.js:', chartLoaded ? 'Loaded ✅' : 'Missing ❌');
-        console.log('jsPDF:', jsPDFLoaded ? 'Loaded ✅' : 'Missing ❌');
+        console.log('Chart.js:', chartLoaded ? 'Loaded' : 'Missing');
+        console.log('jsPDF:', jsPDFLoaded ? 'Loaded' : 'Missing');
         
         if (!chartLoaded) {
-            console.warn('⚠️ Chart.js not loaded - charts will not work');
+            console.warn('Chart.js not loaded - charts will not work');
             showNotification('Chart library not loaded - charts may not work', 'error');
         }
         
         if (!jsPDFLoaded) {
             console.log('ℹ️ jsPDF not available - will use text export fallback');
         } else {
-            console.log('✅ All libraries loaded successfully');
+            console.log('All libraries loaded successfully');
         }
     };
     
@@ -1457,7 +1501,7 @@ function applyCorrection() {
     displayCorrections();
     calculateAdjustedStats();
     
-    showNotification(`✅ Corrected ${count} class(es) for ${subject.subject}`, 'success');
+    showNotification(`Corrected ${count} class(es) for ${subject.subject}`, 'success');
     
     // Reset inputs
     document.getElementById('correctionSubject').value = '';
@@ -1476,7 +1520,7 @@ function displayCorrections() {
     
     summaryDiv.classList.add('active');
     
-    let html = '<h4 style="margin-bottom: 1rem; color: var(--text-primary);">📋 Active Corrections:</h4>';
+    let html = `<h4 style="margin-bottom: 1rem; color: var(--text-primary);">${getIconSVG('clipboard',16)} Active Corrections:</h4>`;
     
     for (const [subject, count] of Object.entries(attendanceCorrections)) {
         if (count > 0) {
@@ -1490,7 +1534,7 @@ function displayCorrections() {
                     </div>
                     <div style="display: flex; gap: 0.5rem; align-items: center;">
                         <span class="correction-badge">+${count}</span>
-                        <button class="remove-correction" onclick="removeCorrection('${subject}')">✕</button>
+                        <button class="remove-correction" onclick="removeCorrection('${subject}')">${getIconSVG('x-circle',12)}</button>
                     </div>
                 </div>
             `;
@@ -1561,34 +1605,34 @@ function calculateAdjustedStats() {
     
     if (adjustedPercentage >= 75 && originalPercentage < 75) {
         insights.push({
-            icon: '🎉',
+            icon: getIconSVG('check-circle',14),
             text: `Great news! With corrections, you've reached the 75% threshold (Safe Zone).`
         });
     } else if (adjustedPercentage >= 60 && originalPercentage < 60) {
         insights.push({
-            icon: '✅',
+            icon: getIconSVG('check-circle',14),
             text: `You've moved into the Warning Zone (60%+). ${(75 - adjustedPercentage).toFixed(1)}% more needed for Safe Zone.`
         });
     } else if (adjustedPercentage < 60) {
         insights.push({
-            icon: '⚠️',
+            icon: getIconSVG('alert-triangle',14),
             text: `Still in Critical Zone. Need ${Math.ceil((0.6 * originalTotal - adjustedAttended) / 0.4)} more classes for 60%.`
         });
     } else if (adjustedPercentage >= 75) {
         insights.push({
-            icon: '🌟',
+            icon: getIconSVG('chart-bar',14),
             text: `Excellent! You're in the Safe Zone with ${(adjustedPercentage - 75).toFixed(1)}% buffer above 75%.`
         });
     }
     
     insights.push({
-        icon: '📊',
+        icon: getIconSVG('chart-bar',14),
         text: `Corrected ${totalCorrections} mismarked class${totalCorrections > 1 ? 'es' : ''} across ${Object.keys(attendanceCorrections).length} subject${Object.keys(attendanceCorrections).length > 1 ? 's' : ''}.`
     });
     
     if (improvement > 0) {
         insights.push({
-            icon: '📈',
+            icon: getIconSVG('chart-bar',14),
             text: `Overall attendance improved by ${improvement.toFixed(2)}% after corrections.`
         });
     }
@@ -1605,9 +1649,9 @@ function calculateAdjustedStats() {
             
             let status = '';
             if (adjPercent >= 75 && origPercent < 75) {
-                status = '✨ Now above 75%!';
+                status = 'Now above 75%!';
             } else if (adjPercent >= 60 && origPercent < 60) {
-                status = '✅ Now above 60%';
+                status = 'Now above 60%';
             }
             
             subjectInsights.push({
@@ -1624,7 +1668,7 @@ function calculateAdjustedStats() {
     // Build HTML
     let html = `
         <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-primary);">
-            📊 Adjusted Attendance Summary
+            ${getIconSVG('chart-bar',18)} Adjusted Attendance Summary
         </h4>
         
         <div class="comparison-grid">
@@ -1645,7 +1689,7 @@ function calculateAdjustedStats() {
         </div>
         
         <div class="insights-box">
-            <h4>💡 Key Insights</h4>
+            <h4>${getIconSVG('lightbulb',16)} Key Insights</h4>
             ${insights.map(insight => `
                 <div class="insight-item">
                     <span class="insight-icon">${insight.icon}</span>
@@ -1659,7 +1703,7 @@ function calculateAdjustedStats() {
     if (subjectInsights.length > 0) {
         html += `
             <div style="margin-top: 1.5rem;">
-                <h4 style="margin-bottom: 1rem; color: var(--text-primary);">📖 Subject-wise Adjustments</h4>
+                <h4 style="margin-bottom: 1rem; color: var(--text-primary);">${getIconSVG('book',16)} Subject-wise Adjustments</h4>
                 <div class="comparison-grid">
         `;
         
@@ -1711,6 +1755,7 @@ displayDashboard = function(data) {
 
 // Initialize corrections on page load
 document.addEventListener('DOMContentLoaded', () => {
+    initInlineIcons();
     loadCorrections();
 });
 

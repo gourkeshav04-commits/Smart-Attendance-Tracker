@@ -90,14 +90,14 @@
                 <div class="field">
                     <label for="username">Student ID / Username</label>
                     <div class="input-wrap">
-                        <span class="input-icon">👤</span>
+                        <span class="input-icon" data-icon="user" aria-hidden="true"></span>
                         <input id="username" type="text" placeholder="e.g. 0103AL231103" autocomplete="username">
                     </div>
                 </div>
                 <div class="field">
                     <label for="password">Portal Password</label>
                     <div class="input-wrap">
-                        <span class="input-icon">🔒</span>
+                        <span class="input-icon" data-icon="lock" aria-hidden="true"></span>
                         <input id="password" type="password" placeholder="Enter your password" autocomplete="current-password">
                     </div>
                 </div>
@@ -106,7 +106,7 @@
             <div class="form-footer">
                 <div class="info-text">Credentials are never stored or shared</div>
                 <button type="submit" class="btn-primary" id="fetchBtn">
-                    <span id="btnText">🔍 Fetch Attendance</span>
+                    <span id="btnText"><span data-icon="search" aria-hidden="true"></span> Fetch Attendance</span>
                     <div class="loading-spinner" id="loadingSpinner" style="display: none;"></div>
                 </button>
             </div>
@@ -119,20 +119,20 @@
         <div class="hero-label">Help Center</div>
         <h1>How can we <span class="highlight">help you?</span></h1>
         <p>Everything you need to know about Smart Attendance Tracker.</p>
-        <div class="search-wrap">
-        <span class="search-icon">🔍</span>
+            <div class="search-wrap">
+        <span class="search-icon" data-icon="search" aria-hidden="true"></span>
         <input type="text" id="search-input" class="search-input" placeholder="Search for answers..."/>
-        <span class="search-clear" id="search-clear" onclick="clearSearch()">✕</span>
+        <span class="search-clear" id="search-clear" onclick="clearSearch()">&times;</span>
         </div>
     </section>
     <!-- QUICK LINKS -->
     <section class="quick-links" id="quick-links">
-        <div class="quick-card" onclick="jumpTo('getting-started')"><div class="quick-icon">🚀</div><div class="quick-label">Getting Started</div></div>
-        <div class="quick-card" onclick="jumpTo('attendance')"><div class="quick-icon">📋</div><div class="quick-label">Attendance</div></div>
-        <div class="quick-card" onclick="jumpTo('predictions')"><div class="quick-icon">🤖</div><div class="quick-label">AI Predictions</div></div>
-        <div class="quick-card" onclick="jumpTo('account')"><div class="quick-icon">👤</div><div class="quick-label">Account</div></div>
-        <div class="quick-card" onclick="jumpTo('privacy')"><div class="quick-icon">🔒</div><div class="quick-label">Privacy</div></div>
-        <div class="quick-card" onclick="jumpTo('troubleshooting')"><div class="quick-icon">🛠️</div><div class="quick-label">Troubleshooting</div></div>
+        <div class="quick-card" onclick="jumpTo('getting-started')"><div class="quick-icon" data-icon="rocket" aria-hidden="true"></div><div class="quick-label">Getting Started</div></div>
+        <div class="quick-card" onclick="jumpTo('attendance')"><div class="quick-icon" data-icon="clipboard" aria-hidden="true"></div><div class="quick-label">Attendance</div></div>
+        <div class="quick-card" onclick="jumpTo('predictions')"><div class="quick-icon" data-icon="chart-bar" aria-hidden="true"></div><div class="quick-label">AI Predictions</div></div>
+        <div class="quick-card" onclick="jumpTo('account')"><div class="quick-icon" data-icon="user" aria-hidden="true"></div><div class="quick-label">Account</div></div>
+        <div class="quick-card" onclick="jumpTo('privacy')"><div class="quick-icon" data-icon="lock" aria-hidden="true"></div><div class="quick-label">Privacy</div></div>
+        <div class="quick-card" onclick="jumpTo('troubleshooting')"><div class="quick-icon" data-icon="wrench" aria-hidden="true"></div><div class="quick-label">Troubleshooting</div></div>
     </section>
     <!-- FAQ CONTAINER -->
     <div class="faq-container" id="faq-container">
@@ -224,7 +224,7 @@
     </section>
     </div><!-- /faq-container -->
     <div class="no-results" id="no-results">
-        <div class="no-results-icon">🔍</div>
+        <div class="no-results-icon" data-icon="search" aria-hidden="true"></div>
         <p>No results for "<span id="no-results-query"></span>"</p>
         <small>Try different keywords or browse the sections above.</small>
     </div>
@@ -234,7 +234,7 @@
             <div class="section-label-line" style="margin-bottom:12px"><span class="section-dot"></span>Still need help?</div>
             <p>Can't find what you're looking for? Reach out and we'll get back to you.</p>
         </div>
-        <a href="mailto:support@smartattendance.app" class="btn-contact">✉️ Contact Support</a>
+        <a href="mailto:support@smartattendance.app" class="btn-contact"><span data-icon="mail" aria-hidden="true"></span> Contact Support</a>
         </div>
     </section>
     </div>
@@ -296,7 +296,7 @@
             </div>
 
             <div class="predictor-section">
-                <h3>🎯 Attendance Predictor</h3>
+                <h3><span data-icon="target" aria-hidden="true"></span> Attendance Predictor</h3>
                 <div class="predictor-controls">
                     <div class="predictor-input">
                         <label>Classes to attend:</label>
@@ -314,16 +314,16 @@
                             <button type="button" class="stepper-btn" data-action="inc">+</button>
                         </div>
                     </div>
-                    <button class="btn btn-primary" id="simulateBtn" onclick="simulateAttendance()"><span class="btn-icon">🎯</span><span>Simulate Impact</span></button>
+                    <button class="btn btn-primary" id="simulateBtn" onclick="simulateAttendance()"><span class="btn-icon" data-icon="target" aria-hidden="true"></span><span>Simulate Impact</span></button>
                 </div>
                 <div id="predictionResult"></div>
             </div>
 
             <div class="corrections-section">
                 <div class="section-header">
-                    <h3>✏️ Attendance Corrections</h3>
+                    <h3><span data-icon="pencil" aria-hidden="true"></span> Attendance Corrections</h3>
                     <button class="btn btn-destructive" onclick="clearCorrections()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                        <span class="btn-icon">🗑️</span><span>Clear All</span>
+                        <span class="btn-icon" data-icon="trash" aria-hidden="true"></span><span>Clear All</span>
                     </button>
                 </div>
                 <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">
@@ -353,7 +353,7 @@
                         <input type="number" id="correctionsCount" value="1" min="1" max="20" class="correction-input">
                     </div>
                     <button class="btn btn-primary btn-sm" onclick="applyCorrection()" style="align-self: flex-end;">
-                        <span class="btn-icon">✅</span><span>Apply Correction</span>
+                        <span class="btn-icon" data-icon="check-circle" aria-hidden="true"></span><span>Apply Correction</span>
                     </button>
                 </div>
 
@@ -375,7 +375,7 @@
 
             <div class="subjects-section">
                 <div class="section-header">
-                    <h2 class="section-title">📖 Subject Analysis</h2>
+                    <h2 class="section-title"><span data-icon="book" aria-hidden="true"></span> Subject Analysis</h2>
                     <div class="view-toggle">
                         <button class="active" onclick="toggleView('grid')">Grid</button>
                         <button onclick="toggleView('list')">List</button>
@@ -387,16 +387,16 @@
             </div>
 
             <div class="actions-section">
-                <h3>📊 Export & Actions</h3>
+                <h3>${' '}<span data-icon="chart-bar" aria-hidden="true"></span> Export & Actions</h3>
                 <div class="actions-grid">
                         <div class="toolbar">
                             <div class="toolbar-group">
-                                <button class="btn btn-secondary" onclick="exportToPDF()"><span class="btn-icon">📄</span><span>Export PDF</span></button>
-                                <button class="btn btn-secondary" onclick="exportToCSV()"><span class="btn-icon">📋</span><span>Export CSV</span></button>
+                                <button class="btn btn-secondary" onclick="exportToPDF()"><span class="btn-icon" data-icon="file" aria-hidden="true"></span><span>Export PDF</span></button>
+                                <button class="btn btn-secondary" onclick="exportToCSV()"><span class="btn-icon" data-icon="clipboard" aria-hidden="true"></span><span>Export CSV</span></button>
                             </div>
                             <div class="toolbar-group">
-                                <button class="btn btn-secondary" onclick="refreshData()"><span class="btn-icon">🔄</span><span>Refresh</span></button>
-                                <button class="btn btn-destructive" onclick="clearData()"><span class="btn-icon">🗑️</span><span>Clear Data</span></button>
+                                <button class="btn btn-secondary" onclick="refreshData()"><span class="btn-icon" data-icon="refresh" aria-hidden="true"></span><span>Refresh</span></button>
+                                <button class="btn btn-destructive" onclick="clearData()"><span class="btn-icon" data-icon="trash" aria-hidden="true"></span><span>Clear Data</span></button>
                             </div>
                         </div>
                     </div>
@@ -404,7 +404,7 @@
         </div>
     </div>
 
-    <button class="refresh-btn" id="refreshBtn" onclick="refreshData()">🔄</button>
+    <button class="refresh-btn" id="refreshBtn" onclick="refreshData()" aria-label="Refresh"><span data-icon="refresh" aria-hidden="true"></span></button>
     <div id="notifications"></div>
 
     <script src="dashboard.js"></script>
