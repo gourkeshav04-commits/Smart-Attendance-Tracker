@@ -160,6 +160,43 @@ html {
     color: #111827;
 }
 
+/* Toast inner layout and enhanced text styling for high visibility */
+.notification .notification-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.notification .notification-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.08);
+}
+.notification .notification-text {
+    font-size: 1.06rem;
+    line-height: 1.06;
+    font-weight: 600;
+    letter-spacing: 0.25px;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.55);
+}
+.notification.success .notification-text { color: #01f915; }
+.notification.error .notification-text   { color: #a90019d3; }
+.notification .notification-close {
+    margin-left: 8px;
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.95);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+}
+
   .logo-text span { color: var(--accent); }
 
   .nav-links {
