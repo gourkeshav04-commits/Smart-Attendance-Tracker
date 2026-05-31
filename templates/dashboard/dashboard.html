@@ -300,13 +300,21 @@
                 <div class="predictor-controls">
                     <div class="predictor-input">
                         <label>Classes to attend:</label>
-                        <input type="number" id="classesToAttend" value="0" min="0" max="50">
+                        <div class="stepper" data-target="classesToAttend">
+                            <button type="button" class="stepper-btn" data-action="dec">−</button>
+                            <input type="number" id="classesToAttend" value="0" min="0" max="50" class="input-field">
+                            <button type="button" class="stepper-btn" data-action="inc">+</button>
+                        </div>
                     </div>
                     <div class="predictor-input">
                         <label>Classes to miss:</label>
-                        <input type="number" id="classesToMiss" value="0" min="0" max="50">
+                        <div class="stepper" data-target="classesToMiss">
+                            <button type="button" class="stepper-btn" data-action="dec">−</button>
+                            <input type="number" id="classesToMiss" value="0" min="0" max="50" class="input-field">
+                            <button type="button" class="stepper-btn" data-action="inc">+</button>
+                        </div>
                     </div>
-                    <button class="btn" onclick="simulateAttendance()">🎯 Simulate Impact</button>
+                    <button class="btn btn-primary" id="simulateBtn" onclick="simulateAttendance()"><span class="btn-icon">🎯</span><span>Simulate Impact</span></button>
                 </div>
                 <div id="predictionResult"></div>
             </div>
@@ -314,8 +322,8 @@
             <div class="corrections-section">
                 <div class="section-header">
                     <h3>✏️ Attendance Corrections</h3>
-                    <button class="btn btn-secondary" onclick="clearCorrections()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                        🗑️ Clear All
+                    <button class="btn btn-destructive" onclick="clearCorrections()" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        <span class="btn-icon">🗑️</span><span>Clear All</span>
                     </button>
                 </div>
                 <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.95rem;">
@@ -333,8 +341,8 @@
                         <label for="correctionsCount">Classes to Mark Present</label>
                         <input type="number" id="correctionsCount" value="1" min="1" max="20" class="correction-input">
                     </div>
-                    <button class="btn" onclick="applyCorrection()" style="align-self: flex-end;">
-                        ✅ Apply Correction
+                    <button class="btn btn-primary btn-sm" onclick="applyCorrection()" style="align-self: flex-end;">
+                        <span class="btn-icon">✅</span><span>Apply Correction</span>
                     </button>
                 </div>
 
@@ -370,11 +378,17 @@
             <div class="actions-section">
                 <h3>📊 Export & Actions</h3>
                 <div class="actions-grid">
-                    <button class="btn" onclick="exportToPDF()">📄 Export PDF</button>
-                    <button class="btn" onclick="exportToCSV()">📋 Export CSV</button>
-                    <button class="btn btn-secondary" onclick="refreshData()">🔄 Refresh Data</button>
-                    <button class="btn btn-secondary" onclick="clearData()">🗑️ Clear Data</button>
-                </div>
+                        <div class="toolbar">
+                            <div class="toolbar-group">
+                                <button class="btn btn-secondary" onclick="exportToPDF()"><span class="btn-icon">📄</span><span>Export PDF</span></button>
+                                <button class="btn btn-secondary" onclick="exportToCSV()"><span class="btn-icon">📋</span><span>Export CSV</span></button>
+                            </div>
+                            <div class="toolbar-group">
+                                <button class="btn btn-secondary" onclick="refreshData()"><span class="btn-icon">🔄</span><span>Refresh</span></button>
+                                <button class="btn btn-destructive" onclick="clearData()"><span class="btn-icon">🗑️</span><span>Clear Data</span></button>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
     </div>
@@ -383,5 +397,17 @@
     <div id="notifications"></div>
 
     <script src="dashboard.js"></script>
+    <!-- Confirmation modal for destructive actions -->
+    <div id="confirmModal" class="confirm-modal" aria-hidden="true">
+        <div class="confirm-backdrop" tabindex="-1"></div>
+        <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <h3 id="confirmTitle">Confirm Action</h3>
+            <p id="confirmMessage">Are you sure?</p>
+            <div class="confirm-actions">
+                <button id="confirmCancel" class="btn btn-secondary">Cancel</button>
+                <button id="confirmOk" class="btn btn-destructive">Confirm</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

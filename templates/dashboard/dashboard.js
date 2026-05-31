@@ -179,6 +179,42 @@ function showNotification(message, type = 'success') {
     });
     notification.addEventListener('click', () => close());
 }
+
+// Confirmation modal helper
+function showConfirm(message, onConfirm, title = 'Confirm Action') {
+    const modal = document.getElementById('confirmModal');
+    const msgEl = document.getElementById('confirmMessage');
+    const titleEl = document.getElementById('confirmTitle');
+    const okBtn = document.getElementById('confirmOk');
+    const cancelBtn = document.getElementById('confirmCancel');
+    if (!modal || !msgEl || !okBtn || !cancelBtn) {
+        // Fallback to native confirm
+        if (window.confirm(message)) onConfirm();
+        return;
+    }
+
+    titleEl.textContent = title;
+    msgEl.textContent = message;
+    modal.setAttribute('aria-hidden', 'false');
+
+    function cleanup() {
+        modal.setAttribute('aria-hidden', 'true');
+        okBtn.removeEventListener('click', onOk);
+        cancelBtn.removeEventListener('click', onCancel);
+        document.removeEventListener('keydown', onKey);
+    }
+
+    function onOk(e) { e.preventDefault(); cleanup(); onConfirm(); }
+    function onCancel(e) { e.preventDefault(); cleanup(); }
+    function onKey(e) { if (e.key === 'Escape') { cleanup(); } }
+
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+    document.addEventListener('keydown', onKey);
+
+    // Focus the cancel button for safe default
+    cancelBtn.focus();
+}
 // Initialize fetch handler: supports either a form submit (`#loginForm`) or
 // a standalone button (`#fetchBtn`). Posts credentials to `/fetch_attendance`.
 function initFetchHandler() {
@@ -730,6 +766,24 @@ function simulateAttendance() {
     showNotification(`Simulation complete: ${newPercentage.toFixed(1)}% attendance projected`);
 }
 
+// Stepper button handling: increment/decrement inputs used in predictor
+document.addEventListener('click', function (e) {
+    const btn = e.target.closest('.stepper-btn');
+    if (!btn) return;
+    const action = btn.getAttribute('data-action');
+    const stepper = btn.closest('.stepper');
+    if (!stepper) return;
+    const targetId = stepper.getAttribute('data-target');
+    const input = document.getElementById(targetId);
+    if (!input) return;
+    const min = parseInt(input.getAttribute('min') || '0', 10);
+    const max = parseInt(input.getAttribute('max') || '9999', 10);
+    let val = parseInt(input.value || '0', 10);
+    if (action === 'inc') val = Math.min(max, val + 1);
+    else if (action === 'dec') val = Math.max(min, val - 1);
+    input.value = val;
+});
+
 function exportToPDF() {
     if (!attendanceData) {
         showNotification('No data available to export', 'error');
@@ -954,29 +1008,25 @@ function refreshData() {
 }
 
 function clearData() {
-    if (confirm('Are you sure you want to clear all data?')) {
+    showConfirm('Are you sure you want to clear all data?', () => {
         // Destroy charts first
         destroyAllCharts();
-        
+
         // Clear data
         attendanceData = null;
         document.getElementById('dashboard').classList.remove('active');
         document.getElementById('username').value = '';
         document.getElementById('password').value = '';
         document.getElementById('refreshBtn').classList.remove('show');
-        
+
         // Clear session storage
-        try {
-            sessionStorage.removeItem('attendanceData');
-        } catch (error) {
-            console.warn('Could not clear session storage:', error);
-        }
-        
+        try { sessionStorage.removeItem('attendanceData'); } catch (error) { console.warn('Could not clear session storage:', error); }
+
         // Disable auto-refresh
         disableAutoRefresh();
-        
+
         showNotification('Data cleared successfully!');
-    }
+    }, 'Clear All Data');
 }
 
 // Pull to refresh functionality for mobile
@@ -1379,13 +1429,13 @@ function displayCorrections() {
 
 // Remove specific correction
 function removeCorrection(subjectName) {
-    if (confirm(`Remove all corrections for ${subjectName}?`)) {
+    showConfirm(`Remove all corrections for ${subjectName}?`, () => {
         delete attendanceCorrections[subjectName];
         saveCorrections();
         displayCorrections();
         calculateAdjustedStats();
         showNotification(`Corrections removed for ${subjectName}`, 'success');
-    }
+    }, 'Remove Correction');
 }
 
 // Clear all corrections
@@ -1394,15 +1444,15 @@ function clearCorrections() {
         showNotification('No corrections to clear', 'error');
         return;
     }
-    
-    if (confirm('Clear all attendance corrections?')) {
+
+    showConfirm('Clear all attendance corrections?', () => {
         attendanceCorrections = {};
         saveCorrections();
         displayCorrections();
         document.getElementById('adjustedStats').classList.remove('active');
         document.getElementById('adjustedStats').innerHTML = '';
         showNotification('All corrections cleared', 'success');
-    }
+    }, 'Clear Corrections');
 }
 
 // Calculate adjusted statistics
